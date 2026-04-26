@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Activity, ShieldAlert, CheckCircle, AlertTriangle, Smartphone, Volume2, MapPin, Brain } from 'lucide-react';
 
-const API_URL = 'http://localhost:5001/api/soc';
+const API_URL = 'https://finacial-fraud-detection.onrender.com/api/soc';
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
@@ -66,7 +66,7 @@ const Dashboard = () => {
             />
           </div>
         </div>
-        <a href="http://localhost:5001/api/soc/export" download className="btn" style={{ width: 'auto', padding: '0.5rem 1rem', fontSize: '0.875rem' }}>
+        <a href="https://finacial-fraud-detection.onrender.com/api/soc/export" download className="btn" style={{ width: 'auto', padding: '0.5rem 1rem', fontSize: '0.875rem' }}>
           Export Audit Logs
         </a>
       </header>

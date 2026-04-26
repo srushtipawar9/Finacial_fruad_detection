@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { QrCode, Smartphone, BellRing, ShieldCheck, ShieldAlert, AlertTriangle, MessageSquare, Zap, Volume2 } from 'lucide-react';
 
-const API_URL = 'http://localhost:5001/api/soc';
+const API_URL = 'https://finacial-fraud-detection.onrender.com/api/soc';
 
 const EndpointSimulator = () => {
   const [activeTab, setActiveTab] = useState('simulator'); // simulator, notification, sms, device

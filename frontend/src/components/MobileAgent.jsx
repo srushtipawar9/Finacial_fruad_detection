@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Smartphone, ShieldCheck, BellRing, Zap, CheckCircle, Lock, ClipboardList, ChevronRight, AlertCircle, Signal, FileDown, RefreshCw } from 'lucide-react';
 
-const API = 'http://localhost:5001/api/soc';
+const API = 'https://finacial-fraud-detection.onrender.com/api/soc';
 
 const walkthroughText = `MOBILE AGENT SIMULATION — WALKTHROUGH
 ======================================
