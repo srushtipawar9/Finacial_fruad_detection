@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BellRing, Volume2, VolumeX, ShieldAlert, CheckCircle } from 'lucide-react';
 
-const API_URL = 'https://finacial-fraud-detection.onrender.com/api/soc';
+const API_URL = 'https://finacial-fruad-detection.onrender.com/api/soc';
 
 const AlertsManager = () => {
   const [alerts, setAlerts] = useState([]);

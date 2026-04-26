@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Map as MapIcon, ShieldAlert, TrendingUp, MapPin, AlertTriangle } from 'lucide-react';
 
-const API_URL = 'https://finacial-fraud-detection.onrender.com/api/soc';
+const API_URL = 'https://finacial-fruad-detection.onrender.com/api/soc';
 
 // World map coordinates (country centers for pin placement)
 const COUNTRY_COORDS = {
