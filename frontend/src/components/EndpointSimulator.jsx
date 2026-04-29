@@ -7,9 +7,15 @@ const API_URL = 'https://finacial-fruad-detection.onrender.com/api/soc';
 const EndpointSimulator = () => {
   const [activeTab, setActiveTab] = useState('simulator'); // simulator, notification, sms, device
   const [step, setStep] = useState(1);
-  const [upiId, setUpiId] = useState('');
-  const [amount, setAmount] = useState('');
-  const [merchantName, setMerchantName] = useState('');
+  const [upiId, setUpiId] = useState(() => localStorage.getItem('endpointSim_upiId') || '');
+  const [amount, setAmount] = useState(() => localStorage.getItem('endpointSim_amount') || '');
+  const [merchantName, setMerchantName] = useState(() => localStorage.getItem('endpointSim_merchantName') || '');
+
+  React.useEffect(() => {
+    localStorage.setItem('endpointSim_upiId', upiId);
+    localStorage.setItem('endpointSim_amount', amount);
+    localStorage.setItem('endpointSim_merchantName', merchantName);
+  }, [upiId, amount, merchantName]);
   const [preVerifyResult, setPreVerifyResult] = useState(null);
   const [intentId, setIntentId] = useState(null);
   const [deviceHealth, setDeviceHealth] = useState({
@@ -38,6 +44,9 @@ const EndpointSimulator = () => {
     setUpiId('');
     setAmount('');
     setMerchantName('');
+    localStorage.removeItem('endpointSim_upiId');
+    localStorage.removeItem('endpointSim_amount');
+    localStorage.removeItem('endpointSim_merchantName');
     setPreVerifyResult(null);
     setIntentId(null);
     setPostVerifyResult(null);

@@ -62,16 +62,27 @@ Coverage:  2,340 Devices | 12 Regions | 99.4% Uptime | 15.2M daily txns
 const MobileAgent = () => {
   // phone states: wallet | scanning | verifying | result | confirm | success
   const [phoneState, setPhoneState]   = useState('wallet');
-  const [mockUrl, setMockUrl]         = useState('zomato@upi');
+  const [mockUrl, setMockUrl]         = useState(() => localStorage.getItem('mobileAgent_mockUrl') || 'zomato@upi');
   const [isRooted, setIsRooted]       = useState(false);
   const [isRec, setIsRec]             = useState(false);
   const [edrStatus, setEdrStatus]     = useState('safe');
   const [scanResult, setScanResult]   = useState(null);
   const [scanError, setScanError]     = useState(null);
-  const [txLog, setTxLog]             = useState([]);
+  const [txLog, setTxLog]             = useState(() => {
+    const saved = localStorage.getItem('mobileAgent_txLog');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [showSms, setShowSms]         = useState(false);
   const [showSocAlert, setShowSocAlert] = useState(false);
   const [txId]                        = useState('TX_' + Math.floor(Math.random() * 900000 + 100000));
+  
+  React.useEffect(() => {
+    localStorage.setItem('mobileAgent_mockUrl', mockUrl);
+  }, [mockUrl]);
+
+  React.useEffect(() => {
+    localStorage.setItem('mobileAgent_txLog', JSON.stringify(txLog));
+  }, [txLog]);
   const PAY_AMOUNT                    = 500;
 
   /* ── Open scanner ── */
@@ -525,7 +536,19 @@ const MobileAgent = () => {
 
           {/* Agent Settings Panel */}
           <div className="glass-panel" style={{ border: '1px solid rgba(99,102,241,0.2)' }}>
-            <h3 style={{ margin: '0 0 1.25rem', fontSize: '0.95rem', fontWeight: '700' }}>Agent Settings (Simulator Controls)</h3>
+            <h3 style={{ margin: '0 0 1.25rem', fontSize: '0.95rem', fontWeight: '700', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span>Agent Settings (Simulator Controls)</span>
+              <button onClick={() => {
+                if(window.confirm('Clear stored simulator data?')) {
+                  setMockUrl('zomato@upi');
+                  setTxLog([]);
+                  localStorage.removeItem('mobileAgent_mockUrl');
+                  localStorage.removeItem('mobileAgent_txLog');
+                }
+              }} style={{
+                background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '6px', padding: '4px 8px', fontSize: '0.75rem', cursor: 'pointer', fontWeight: '600'
+              }}>Clear Data</button>
+            </h3>
 
             <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '0.3rem', color: 'var(--text-secondary)', fontWeight: '600' }}>Mock QR URL</label>
             <input
