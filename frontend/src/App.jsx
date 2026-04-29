@@ -7,6 +7,8 @@ import AlertsManager from './components/AlertsManager';
 import FraudMap from './components/FraudMap';
 import DeviceHealth from './components/DeviceHealth';
 import MobileAgent from './components/MobileAgent';
+import ThreatAnalytics from './components/ThreatAnalytics';
+import { PieChart as PieChartIcon } from 'lucide-react';
 
 function Sidebar() {
   const location = useLocation();
@@ -38,6 +40,10 @@ function Sidebar() {
           <ShieldCheck size={20} />
           <span>EDR Health</span>
         </Link>
+        <Link to="/analytics" className={`nav-item ${location.pathname === '/analytics' ? 'active' : ''}`}>
+          <PieChartIcon size={20} />
+          <span>Threat Analytics</span>
+        </Link>
         <Link to="/mobile-agent" className={`nav-item ${location.pathname === '/mobile-agent' ? 'active' : ''}`}>
           <Smartphone size={20} />
           <span>Mobile Agent</span>
@@ -62,6 +68,7 @@ function App() {
             <Route path="/alerts" element={<AlertsManager />} />
             <Route path="/map" element={<FraudMap />} />
             <Route path="/edr" element={<DeviceHealth />} />
+            <Route path="/analytics" element={<ThreatAnalytics />} />
             <Route path="/mobile-agent" element={<MobileAgent />} />
             <Route path="/simulator" element={<EndpointSimulator />} />
           </Routes>
