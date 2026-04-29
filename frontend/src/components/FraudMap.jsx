@@ -67,8 +67,8 @@ const FraudMap = () => {
 
       <div className="dashboard-grid">
         {/* World Map SVG */}
-        <div className="glass-panel world-map-container" style={{ gridColumn: 'span 8', minHeight: '500px', padding: '1.5rem' }}>
-          <svg viewBox="0 0 960 600" className="world-map-svg" style={{ width: '100%', height: '100%' }}>
+        <div className="glass-panel world-map-container" style={{ minHeight: '500px', padding: '1.5rem' }}>
+          <svg viewBox="0 0 960 600" className="world-map-svg" style={{ width: '100%', height: '100%', minHeight: '300px' }}>
             {/* Simplified World Map Background */}
             <defs>
               <linearGradient id="mapGradient" x1="0%" y1="0%" x2="100%" y2="100%">

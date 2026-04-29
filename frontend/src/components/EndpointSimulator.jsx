@@ -21,6 +21,7 @@ const EndpointSimulator = () => {
   const [postVerifyResult, setPostVerifyResult] = useState(null);
   const [isMismatchSim, setIsMismatchSim] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState('Mumbai');
 
   // New state for real-world features
   const [notificationData, setNotificationData] = useState({
@@ -45,6 +46,7 @@ const EndpointSimulator = () => {
     setNotificationData({ amount: '', upi_id: '', merchant_name: '' });
     setSmsContent('');
     setGstVerification(null);
+    setSelectedLocation('Mumbai');
   };
 
   // Real-World Data Ingestion: Notification Listener Simulation
@@ -56,7 +58,7 @@ const EndpointSimulator = () => {
         upi_id: notificationData.upi_id,
         merchant_name: notificationData.merchant_name,
         deviceHealth,
-        location: 'Mumbai'
+        location: selectedLocation
       });
       setPreVerifyResult(response.data);
       setStep(2);
@@ -138,13 +140,27 @@ const EndpointSimulator = () => {
   };
 
   const simulateTamperedQR = () => {
-      reset();
-      const fakeUrl = 'https://fake-gpay-reward.com/login';
-      setUpiId(fakeUrl);
-      setMerchantName('Phishing Redirect');
-      setAmount('1.00'); // Default amount for simulation
-      // Stay on Step 1 so user can click 'Scan & Verify'
-      setStep(1);
+    reset();
+    
+    // Multiple tampered QR scenarios
+    const tamperedScenarios = [
+      { url: 'https://fake-gpay-reward.com/login', name: 'Phishing Redirect - Fake Reward', amount: '1.00' },
+      { url: 'https://kyc-update-secure.com/verify', name: 'KYC Scam Portal', amount: '0.10' },
+      { url: 'https://bank-support-verify.net/auth', name: 'Fake Bank Support', amount: '0.01' },
+      { url: 'https://lottery-winner-claim.com/prize', name: 'Lottery Scam', amount: '0.00' },
+      { url: 'https://refund-process-quick.com/return', name: 'Refund Phishing', amount: '5.00' },
+      { url: 'https://upi-customer-care.in/support', name: 'Fake UPI Support', amount: '1.00' },
+      { url: 'https://secure-payment-verify.net/account', name: 'Payment Verification Scam', amount: '10.00' },
+      { url: 'https://account-verify-urgent.com/kyc', name: 'Urgent KYC Scam', amount: '0.50' }
+    ];
+    
+    // Randomly select one scenario
+    const randomScenario = tamperedScenarios[Math.floor(Math.random() * tamperedScenarios.length)];
+    
+    setUpiId(randomScenario.url);
+    setMerchantName(randomScenario.name);
+    setAmount(randomScenario.amount);
+    setStep(1);
   };
 
   const initiatePayment = async (customAmount, customReceiver) => {
@@ -165,7 +181,7 @@ const EndpointSimulator = () => {
           amount: isMismatchSim ? parseFloat(finalAmount) * 10 : finalAmount, // Cause mismatch if flag is set
           upi_id: finalReceiver,
           source: 'notification', // From Module B
-          location: 'Mumbai',
+          location: selectedLocation,
           deviceHealth
         });
         setPostVerifyResult(postRes.data);
@@ -179,21 +195,49 @@ const EndpointSimulator = () => {
   };
 
   const simulateFraud = () => {
-      reset();
-      setUpiId('scammer123@upi');
-      setMerchantName('Known Scammer Account');
-      setAmount('500');
-      // Stay on Step 1 so user can click 'Scan & Verify'
-      setStep(1);
+    reset();
+    
+    // Multiple known scammer scenarios
+    const scammerScenarios = [
+      { upi: 'scammer123@upi', name: 'Known Scammer Account', amount: '500' },
+      { upi: 'freeiphone@upi', name: 'Fake Prize Scam', amount: '1.00' },
+      { upi: 'kyc-update@upi', name: 'KYC Update Scam', amount: '0.10' },
+      { upi: 'lottery-win@upi', name: 'Lottery Scam', amount: '0.00' },
+      { upi: 'refund-process@upi', name: 'Refund Scam', amount: '100' },
+      { upi: 'bank-support@upi', name: 'Fake Bank Support', amount: '0.01' },
+      { upi: 'gift-voucher-claim@upi', name: 'Gift Voucher Scam', amount: '0.00' },
+      { upi: 'urgent-payment-help@upi', name: 'Emergency Payment Scam', amount: '5000' }
+    ];
+    
+    const randomScenario = scammerScenarios[Math.floor(Math.random() * scammerScenarios.length)];
+    
+    setUpiId(randomScenario.upi);
+    setMerchantName(randomScenario.name);
+    setAmount(randomScenario.amount);
+    setStep(1);
   };
 
   const simulateMismatch = () => {
-      reset();
-      setUpiId('merchant@upi');
-      setMerchantName('General Store');
-      setAmount('500'); // User thinks they are paying 500
-      setIsMismatchSim(true);
-      setStep(1);
+    reset();
+    
+    // Multiple amount mismatch scenarios
+    const mismatchScenarios = [
+      { upi: 'merchant@upi', name: 'General Store', displayAmount: '500', actualAmount: '5000', location: 'Mumbai' },
+      { upi: 'grocery@upi', name: 'City Grocery Store', displayAmount: '200', actualAmount: '2000', location: 'Delhi' },
+      { upi: 'restaurant@upi', name: 'Hotel Restaurant', displayAmount: '350', actualAmount: '3500', location: 'Bangalore' },
+      { upi: 'medical@upi', name: 'Medical Store', displayAmount: '100', actualAmount: '1000', location: 'Pune' },
+      { upi: 'electronics@upi', name: 'Electronics Shop', displayAmount: '1500', actualAmount: '15000', location: 'Chennai' },
+      { upi: 'fuel@upi', name: 'Petrol Pump', displayAmount: '500', actualAmount: '5000', location: 'Kolkata' }
+    ];
+    
+    const randomScenario = mismatchScenarios[Math.floor(Math.random() * mismatchScenarios.length)];
+    
+    setUpiId(randomScenario.upi);
+    setMerchantName(randomScenario.name);
+    setAmount(randomScenario.displayAmount);
+    setSelectedLocation(randomScenario.location);
+    setIsMismatchSim(true);
+    setStep(1);
   };
 
   const simulateEDR = () => {
@@ -324,6 +368,32 @@ const EndpointSimulator = () => {
                   placeholder="e.g., Zomato Ltd"
                   style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
                 />
+              </div>
+
+              <div>
+                <label style={{ fontSize: '0.9rem', fontWeight: '600' }}>Location</label>
+                <select
+                  value={selectedLocation}
+                  onChange={e => setSelectedLocation(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '8px',
+                    color: 'white'
+                  }}
+                >
+                  <option value="Mumbai" style={{background: '#1a1a2e'}}>Mumbai</option>
+                  <option value="Delhi" style={{background: '#1a1a2e'}}>Delhi</option>
+                  <option value="Bangalore" style={{background: '#1a1a2e'}}>Bangalore</option>
+                  <option value="Pune" style={{background: '#1a1a2e'}}>Pune</option>
+                  <option value="Chennai" style={{background: '#1a1a2e'}}>Chennai</option>
+                  <option value="Kolkata" style={{background: '#1a1a2e'}}>Kolkata</option>
+                  <option value="Hyderabad" style={{background: '#1a1a2e'}}>Hyderabad</option>
+                  <option value="Ahmedabad" style={{background: '#1a1a2e'}}>Ahmedabad</option>
+                </select>
               </div>
             </div>
 
@@ -521,6 +591,32 @@ const EndpointSimulator = () => {
               <div className="input-group">
                 <label>Amount (₹)</label>
                 <input type="number" value={amount} onChange={e => setAmount(e.target.value)} placeholder="0.00" />
+              </div>
+
+              <div className="input-group">
+                <label>Location</label>
+                <select 
+                  value={selectedLocation} 
+                  onChange={e => setSelectedLocation(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '8px',
+                    color: 'white',
+                    fontSize: '1rem'
+                  }}
+                >
+                  <option value="Mumbai" style={{background: '#1a1a2e'}}>Mumbai</option>
+                  <option value="Delhi" style={{background: '#1a1a2e'}}>Delhi</option>
+                  <option value="Bangalore" style={{background: '#1a1a2e'}}>Bangalore</option>
+                  <option value="Pune" style={{background: '#1a1a2e'}}>Pune</option>
+                  <option value="Chennai" style={{background: '#1a1a2e'}}>Chennai</option>
+                  <option value="Kolkata" style={{background: '#1a1a2e'}}>Kolkata</option>
+                  <option value="Hyderabad" style={{background: '#1a1a2e'}}>Hyderabad</option>
+                  <option value="Ahmedabad" style={{background: '#1a1a2e'}}>Ahmedabad</option>
+                </select>
               </div>
 
               <button className="btn" onClick={() => runPrePaymentCheck()} disabled={!upiId || loading}>

@@ -699,13 +699,25 @@ function getDashboardStats() {
     t.alerts.some(a => a.toLowerCase().includes('tamper') || a.toLowerCase().includes('phishing'))
   ).length;
 
-  // Enhanced regional analysis
-  const regions = Object.keys(regionalThreats).map(region => ({
+  // Enhanced regional analysis - Dynamic based on transaction locations
+  const locationCounts = {};
+  transactions.forEach(t => {
+    const loc = t.location || 'Unknown';
+    if (!locationCounts[loc]) {
+      locationCounts[loc] = { total: 0, fraud: 0 };
+    }
+    locationCounts[loc].total++;
+    if (t.status === 'Potential Fraud') {
+      locationCounts[loc].fraud++;
+    }
+  });
+
+  const regions = Object.keys(locationCounts).map(region => ({
     name: region,
-    risk: transactions.filter(t => t.status === 'Potential Fraud' && t.location === region).length,
-    activeThreats: regionalThreats[region].activeThreats,
-    totalTransactions: transactions.filter(t => t.location === region).length
-  }));
+    risk: locationCounts[region].fraud,
+    activeThreats: locationCounts[region].fraud > 0 ? locationCounts[region].fraud : 0,
+    totalTransactions: locationCounts[region].total
+  })).sort((a, b) => b.risk - a.risk); // Sort by risk descending
 
   // Multi-tenant device monitoring
   const deviceStats = {
