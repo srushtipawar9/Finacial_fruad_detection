@@ -34,8 +34,12 @@ const FraudMap = () => {
     const fetchMapData = async () => {
       try {
         const response = await axios.get(`${API_URL}/dashboard/stats`);
-        setRegions(response.data.overview.regions);
+        const fetchedRegions = response.data.overview.regions;
+        setRegions(fetchedRegions);
         setLoading(false);
+        if (fetchedRegions.length > 0) {
+          setSelectedRegion(prev => prev || fetchedRegions[0]);
+        }
       } catch (error) {
         console.error('Error fetching map data:', error);
       }
@@ -67,7 +71,7 @@ const FraudMap = () => {
 
       <div className="dashboard-grid">
         {/* World Map SVG */}
-        <div className="glass-panel world-map-container" style={{ minHeight: '500px', padding: '1.5rem' }}>
+        <div className="glass-panel world-map-container" style={{ gridColumn: 'span 8', minHeight: '500px', padding: '1.5rem' }}>
           <svg viewBox="0 0 960 600" className="world-map-svg" style={{ width: '100%', height: '100%', minHeight: '300px' }}>
             {/* Simplified World Map Background */}
             <defs>
@@ -216,8 +220,36 @@ const FraudMap = () => {
             <TrendingUp size={24} />
             All Active Threat Zones
           </h3>
+
+          {regions.length > 0 && (
+            <div style={{ display: 'flex', gap: '2rem', marginBottom: '1.5rem', padding: '1.25rem', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <div style={{ flex: 1 }}>
+                <span className="text-secondary" style={{ fontSize: '0.85rem', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <TrendingUp size={14} className="text-fraud" /> Highest Threat Region
+                </span>
+                <div style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--status-fraud)', marginTop: '0.5rem' }}>
+                  {regions.reduce((max, r) => r.risk > max.risk ? r : max, regions[0]).name}
+                  <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginLeft: '0.5rem', fontWeight: 'normal' }}>
+                    ({Math.max(...regions.map(r => r.risk))} active cases)
+                  </span>
+                </div>
+              </div>
+              <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+              <div style={{ flex: 1 }}>
+                <span className="text-secondary" style={{ fontSize: '0.85rem', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <ShieldAlert size={14} className="text-verified" /> Lowest Threat Region
+                </span>
+                <div style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--status-verified)', marginTop: '0.5rem' }}>
+                  {regions.reduce((min, r) => r.risk < min.risk ? r : min, regions[0]).name}
+                  <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginLeft: '0.5rem', fontWeight: 'normal' }}>
+                    ({Math.min(...regions.map(r => r.risk))} active cases)
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
           
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
             {regions.map(region => (
               <div key={region.name} className="threat-zone-card" onClick={() => setSelectedRegion(region)}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '1rem' }}>
