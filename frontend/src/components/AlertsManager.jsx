@@ -85,7 +85,14 @@ const AlertsManager = () => {
         <button 
           className="btn" 
           style={{ width: 'auto', background: isVoiceEnabled ? 'var(--status-fraud-bg)' : 'var(--bg-tertiary)' }}
-          onClick={() => isVoiceEnabled ? handleStopVoice() : setIsVoiceEnabled(true)}
+          onClick={() => {
+            if (isVoiceEnabled) {
+              handleStopVoice();
+            } else {
+              setIsVoiceEnabled(true);
+              setLastTxId(null); // Force announcement of current threat on enable
+            }
+          }}
         >
           {isVoiceEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
           {isVoiceEnabled ? 'Voice Alerts ON' : 'Voice Alerts OFF'}

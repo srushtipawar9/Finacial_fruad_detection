@@ -76,6 +76,16 @@ const MobileAgent = () => {
   const [showSocAlert, setShowSocAlert] = useState(false);
   const [txId]                        = useState('TX_' + Math.floor(Math.random() * 900000 + 100000));
   
+  const announceThreat = (status, location) => {
+    if (!('speechSynthesis' in window)) return;
+    
+    window.speechSynthesis.cancel(); // Clear queue before new alert
+    const msg = new SpeechSynthesisUtterance();
+    msg.text = `Attention: ${status} detected in ${location} endpoint. Please respond.`;
+    msg.rate = 0.9;
+    window.speechSynthesis.speak(msg);
+  };
+  
   React.useEffect(() => {
     localStorage.setItem('mobileAgent_mockUrl', mockUrl);
   }, [mockUrl]);
@@ -108,6 +118,7 @@ const MobileAgent = () => {
       if (!isSafe) {
         setTimeout(() => {
           setShowSocAlert(true);
+          announceThreat('PHISHING THREAT', data.location || 'Mumbai');
           setTimeout(() => setShowSocAlert(false), 5000);
         }, 400);
       }
@@ -135,6 +146,7 @@ const MobileAgent = () => {
       if (!isSafe) {
         setTimeout(() => {
           setShowSocAlert(true);
+          announceThreat('SIMULATED THREAT', 'Mumbai');
           setTimeout(() => setShowSocAlert(false), 5000);
         }, 400);
       }
