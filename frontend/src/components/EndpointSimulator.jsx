@@ -260,13 +260,13 @@ const EndpointSimulator = () => {
   };
 
   return (
-    <div className="simulator-container fade-in">
-      <div style={{ marginRight: '3rem', maxWidth: '600px' }}>
+    <div className="simulator-container fade-in endpoint-sim-mobile-wrap">
+      <div className="endpoint-sim-left-panel">
         <h2>🔥 Legacy SOC Simulator</h2>
         <p className="text-secondary">Interactive legacy simulator for endpoint ingestion, fraud matching, and alert validation.</p>
 
         {/* Tab Navigation */}
-        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '1rem' }}>
+        <div className="endpoint-sim-tab-nav">
           <button
             className={`tab-button ${activeTab === 'simulator' ? 'active' : ''}`}
             onClick={() => setActiveTab('simulator')}
@@ -572,7 +572,7 @@ const EndpointSimulator = () => {
             </button>
         </div>
       
-        <div className="mobile-frame">
+        <div className="mobile-frame endpoint-sim-mobile-frame">
           <div className="mobile-screen">
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>UPI Security Module</div>
