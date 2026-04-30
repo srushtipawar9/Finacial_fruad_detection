@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const riskScoring = require('../services/riskScoring');
+const TransactionModel = require('../models/Transaction');
 
 // Module 1: Transaction Ingestion API (Part 2)
 // POST /transaction/detect
@@ -288,6 +289,19 @@ router.post('/resolve', (req, res) => {
 router.get('/dashboard/stats', (req, res) => {
   const stats = riskScoring.getDashboardStats();
   res.json(stats);
+});
+
+// Fetch Last 7 Days Transaction History
+router.get('/history', async (req, res) => {
+  try {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const history = await TransactionModel.find({ timestamp: { $gte: sevenDaysAgo } }).sort({ timestamp: -1 });
+    res.json(history);
+  } catch (error) {
+    console.error('Error fetching history:', error);
+    res.status(500).json({ error: 'Internal server error fetching history' });
+  }
 });
 
 module.exports = router;

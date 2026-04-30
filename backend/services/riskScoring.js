@@ -1,5 +1,7 @@
 // Enhanced AI SOC Engine - Real-World Implementation
 // Database Simulation with Multi-Tenant Support
+const TransactionModel = require('../models/Transaction');
+
 let transactions = [];
 let pendingIntents = new Map();
 let userProfiles = new Map();
@@ -681,6 +683,24 @@ async function ingestTransaction(data) {
 
   transactions.unshift(record);
   if (data.intent_id) pendingIntents.delete(data.intent_id);
+
+  // Save to MongoDB
+  try {
+    const newDbTx = new TransactionModel({
+      endpointId: data.deviceHealth?.id || 'unknown',
+      threatType: record.status,
+      severity: riskAnalysis.risk_score < 30 ? 'High' : riskAnalysis.risk_score < 60 ? 'Medium' : 'Low',
+      action: riskAnalysis.risk_score < 30 ? 'Blocked' : 'Allowed',
+      details: record,
+      riskScore: record.riskScore,
+      ipAddress: data.ip || '127.0.0.1',
+      location: record.location,
+      isFlagged: record.status !== 'Verified Transaction'
+    });
+    await newDbTx.save();
+  } catch (dbErr) {
+    console.error('Failed to save transaction to DB:', dbErr);
+  }
 
   return record;
 }

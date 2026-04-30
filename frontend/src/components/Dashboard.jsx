@@ -8,6 +8,7 @@ const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [voiceAlerts, setVoiceAlerts] = useState([]);
+  const [history, setHistory] = useState([]);
 
   const fetchStats = async () => {
     try {
@@ -29,12 +30,23 @@ const Dashboard = () => {
     }
   };
 
+  const fetchHistory = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/history`);
+      setHistory(response.data || []);
+    } catch (error) {
+      console.error('Error fetching history:', error);
+    }
+  };
+
   useEffect(() => {
     fetchStats();
     fetchVoiceAlerts();
+    fetchHistory();
     const interval = setInterval(() => {
       fetchStats();
       fetchVoiceAlerts();
+      fetchHistory();
     }, 3000);
     return () => clearInterval(interval);
   }, []);
@@ -205,6 +217,47 @@ const Dashboard = () => {
                         ⚠️ {tx.alerts[0]}
                       </div>
                     )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 7 Days History Feed */}
+        <div className="glass-panel" style={{ gridColumn: 'span 12', marginTop: '1rem' }}>
+          <h3>📅 Transaction History (Last 7 Days)</h3>
+          <p className="text-secondary" style={{ fontSize: '0.8rem', marginBottom: '1rem' }}>
+            Automatically synced from secure database.
+          </p>
+          <div className="transaction-list" style={{ marginTop: '0.5rem', maxHeight: '400px', overflowY: 'auto' }}>
+            {history.length === 0 && (
+              <div className="text-secondary">No historical data available.</div>
+            )}
+            {history.map((tx) => (
+              <div key={tx._id} className="transaction-item" style={{ background: 'rgba(255,255,255,0.02)' }}>
+                <div className="tx-info">
+                  <div className={`tx-icon ${
+                    tx.threatType === 'Verified Transaction' ? 'badge-verified' : 
+                    tx.threatType === 'Potential Fraud' ? 'badge-fraud' : 'badge-warning'
+                  }`}>
+                    {tx.threatType === 'Verified Transaction' ? <CheckCircle size={16} /> : 
+                     tx.threatType === 'Potential Fraud' ? <ShieldAlert size={16} /> : <AlertTriangle size={16} />}
+                  </div>
+                  <div style={{ width: '100%' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '600', fontSize: '0.9rem' }}>
+                      <span>₹{tx.details?.amount} → {tx.details?.merchant_name || tx.details?.upi_id}</span>
+                      <span className="text-secondary" style={{ fontSize: '0.8rem' }}>
+                        {new Date(tx.timestamp).toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="text-secondary" style={{ fontSize: '0.8rem', display: 'flex', gap: '1rem', marginTop: '0.25rem' }}>
+                      <span>📍 {tx.location || 'Mumbai'}</span>
+                      <span>🛡️ Risk: {tx.riskScore}/100</span>
+                      <span style={{ color: tx.action === 'Blocked' ? '#ff6b6b' : '#00d4aa' }}>
+                        Action: {tx.action}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
