@@ -36,27 +36,27 @@ const DeviceHealth = () => {
       </header>
 
       <div className="dashboard-grid">
-        <div className="glass-panel stat-card" style={{ gridColumn: 'span 4' }}>
+        <div className="glass-panel stat-card col-span-4">
           <div className="stat-label">Security Health Index</div>
           <div className="stat-value text-verified">94%</div>
           <div className="text-secondary" style={{ fontSize: '0.8rem' }}>Global Fleet Status</div>
         </div>
 
-        <div className="glass-panel stat-card" style={{ gridColumn: 'span 4' }}>
+        <div className="glass-panel stat-card col-span-4">
           <div className="stat-label">Compromised Devices</div>
           <div className="stat-value text-fraud">{highRiskDevices}</div>
           <div className="text-secondary" style={{ fontSize: '0.8rem' }}>Rooted / Screen Record detected</div>
         </div>
 
-        <div className="glass-panel stat-card" style={{ gridColumn: 'span 4' }}>
+        <div className="glass-panel stat-card col-span-4">
           <div className="stat-label">Protected Endpoints</div>
           <div className="stat-value">{stats.overview.totalTransactions * 12}</div>
           <div className="text-secondary" style={{ fontSize: '0.8rem' }}>Active UPI Module Instances</div>
         </div>
 
-        <div className="glass-panel" style={{ gridColumn: 'span 12', marginTop: '1rem' }}>
+        <div className="glass-panel col-span-12" style={{ marginTop: '1rem' }}>
           <h3>EDR Layer Checks</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginTop: '1.5rem' }}>
+          <div className="grid-4" style={{ marginTop: '1.5rem' }}>
             <div className="transaction-item" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '1rem' }}>
                <Fingerprint size={32} className="text-verified" />
                <div style={{ fontWeight: '700' }}>Biometric Integrity</div>

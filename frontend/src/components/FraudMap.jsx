@@ -56,7 +56,7 @@ const FraudMap = () => {
 
   return (
     <div className="fade-in">
-      <header style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+      <header style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1>Global Fraud Heatmap</h1>
           <p className="text-secondary">Real-time geospatial fraud detection & regional threat intelligence across transaction networks.</p>
@@ -71,7 +71,7 @@ const FraudMap = () => {
 
       <div className="dashboard-grid">
         {/* World Map SVG */}
-        <div className="glass-panel world-map-container" style={{ gridColumn: 'span 8', minHeight: '500px', padding: '1.5rem' }}>
+        <div className="glass-panel world-map-container col-span-8" style={{ minHeight: '500px', padding: '1.5rem' }}>
           <svg viewBox="0 0 960 600" className="world-map-svg" style={{ width: '100%', height: '100%', minHeight: '300px' }}>
             {/* Simplified World Map Background */}
             <defs>
@@ -167,7 +167,7 @@ const FraudMap = () => {
         </div>
 
         {/* Regional Details Panel */}
-        <div className="glass-panel" style={{ gridColumn: 'span 4', height: 'fit-content' }}>
+        <div className="glass-panel col-span-4" style={{ height: 'fit-content' }}>
           <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', margin: '0 0 1.5rem 0' }}>
             <MapPin size={24} />
             {selectedRegion ? `${selectedRegion.name} Details` : 'Select a Region'}
@@ -215,14 +215,14 @@ const FraudMap = () => {
         </div>
 
         {/* Regional Threat List */}
-        <div className="glass-panel" style={{ gridColumn: 'span 12', marginTop: '1rem' }}>
+        <div className="glass-panel col-span-12" style={{ marginTop: '1rem' }}>
           <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', margin: '0 0 1.5rem 0' }}>
             <TrendingUp size={24} />
             All Active Threat Zones
           </h3>
 
           {regions.length > 0 && (
-            <div style={{ display: 'flex', gap: '2rem', marginBottom: '1.5rem', padding: '1.25rem', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <div style={{ display: 'flex', gap: '2rem', marginBottom: '1.5rem', padding: '1.25rem', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', flexWrap: 'wrap' }}>
               <div style={{ flex: 1 }}>
                 <span className="text-secondary" style={{ fontSize: '0.85rem', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <TrendingUp size={14} className="text-fraud" /> Highest Threat Region

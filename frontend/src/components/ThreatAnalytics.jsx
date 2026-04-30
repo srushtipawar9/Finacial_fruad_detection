@@ -66,7 +66,7 @@ const ThreatAnalytics = () => {
       <div className="dashboard-grid">
         
         {/* Severity Pie Chart */}
-        <div className="glass-panel" style={{ gridColumn: 'span 4', minHeight: '400px' }}>
+        <div className="glass-panel col-span-4" style={{ minHeight: '400px' }}>
           <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
             <PieChartIcon size={22} className="text-warning" /> Severity Distribution
           </h3>
@@ -96,7 +96,7 @@ const ThreatAnalytics = () => {
         </div>
 
         {/* Region Bar Chart */}
-        <div className="glass-panel" style={{ gridColumn: 'span 8', minHeight: '400px' }}>
+        <div className="glass-panel col-span-8" style={{ minHeight: '400px' }}>
           <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
             <BarChart2 size={22} className="text-verified" /> Threats by Region (City/Country)
           </h3>
@@ -122,7 +122,7 @@ const ThreatAnalytics = () => {
         </div>
 
         {/* Timeline Area Chart */}
-        <div className="glass-panel" style={{ gridColumn: 'span 12', minHeight: '350px' }}>
+        <div className="glass-panel col-span-12" style={{ minHeight: '350px' }}>
           <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
             <Activity size={22} className="text-fraud" /> Daily Threat Trend
           </h3>

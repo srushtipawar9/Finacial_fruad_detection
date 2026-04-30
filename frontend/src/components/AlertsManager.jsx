@@ -77,7 +77,7 @@ const AlertsManager = () => {
 
   return (
     <div className="fade-in">
-      <header style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <header style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1>Threat Alerts Manager</h1>
           <p className="text-secondary">Real-time voice-activated response system</p>
@@ -106,7 +106,7 @@ const AlertsManager = () => {
                   <div style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>Alerts: {alert.alerts.join(', ')}</div>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '1rem' }}>
+              <div className="alert-actions" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                 <button 
                   className="btn" 
                   style={{ width: 'auto', padding: '0.5rem 1rem', background: 'var(--status-verified)' }}

@@ -60,7 +60,7 @@ const Dashboard = () => {
   return (
     <div className="fade-in">
       <header style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
-        <div style={{ flex: '1 1 min-content' }}>
+        <div>
           <h1>AI SOC Overview</h1>
           <p className="text-secondary">Global Financial Threat Detection Intelligence</p>
           <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
@@ -132,7 +132,7 @@ const Dashboard = () => {
 
         {/* Voice Alerts Panel */}
         {voiceAlerts.length > 0 && (
-          <div className="glass-panel" style={{ gridColumn: 'span 4', marginTop: '1rem' }}>
+          <div className="glass-panel col-span-12" style={{ marginTop: '1rem' }}>
             <h4 style={{ color: '#ff6b6b', marginBottom: '1rem' }}>🚨 Active Voice Alerts</h4>
             <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
               {voiceAlerts.slice(0, 3).map((alert) => (
@@ -153,7 +153,7 @@ const Dashboard = () => {
 
         {/* Regional Threat Map */}
         {regionalThreats && regionalThreats.length > 0 && (
-          <div className="glass-panel" style={{ gridColumn: 'span 4', marginTop: '1rem' }}>
+          <div className="glass-panel col-span-12" style={{ marginTop: '1rem' }}>
             <h4 style={{ color: '#ffc107', marginBottom: '1rem' }}>🌍 Regional Threat Intelligence</h4>
             <div style={{ display: 'grid', gap: '0.5rem' }}>
               {regionalThreats.map((region) => (
@@ -179,7 +179,7 @@ const Dashboard = () => {
         )}
 
         {/* Transaction Feed */}
-        <div className="glass-panel" style={{ gridColumn: 'span 12', marginTop: '1rem' }}>
+        <div className="glass-panel col-span-12" style={{ marginTop: '1rem' }}>
           <h3>🔍 Real-Time Transaction Intelligence Feed</h3>
           <div className="transaction-list" style={{ marginTop: '1.5rem' }}>
             {recentTransactions.length === 0 && (
@@ -225,7 +225,7 @@ const Dashboard = () => {
         </div>
 
         {/* 7 Days History Feed */}
-        <div className="glass-panel" style={{ gridColumn: 'span 12', marginTop: '1rem' }}>
+        <div className="glass-panel col-span-12" style={{ marginTop: '1rem' }}>
           <h3>📅 Transaction History (Last 7 Days)</h3>
           <p className="text-secondary" style={{ fontSize: '0.8rem', marginBottom: '1rem' }}>
             Automatically synced from secure database.
