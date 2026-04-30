@@ -76,14 +76,38 @@ const MobileAgent = () => {
   const [showSocAlert, setShowSocAlert] = useState(false);
   const [txId]                        = useState('TX_' + Math.floor(Math.random() * 900000 + 100000));
   
+  const playAlertSound = () => {
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); 
+      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+      oscillator.start(audioCtx.currentTime);
+      oscillator.stop(audioCtx.currentTime + 0.5);
+    } catch (e) {
+      console.error("Audio beep failed:", e);
+    }
+  };
+
   const announceThreat = (status, location) => {
+    playAlertSound();
     if (!('speechSynthesis' in window)) return;
     
-    window.speechSynthesis.cancel(); // Clear queue before new alert
-    const msg = new SpeechSynthesisUtterance();
-    msg.text = `Attention: ${status} detected in ${location} endpoint. Please respond.`;
-    msg.rate = 0.9;
-    window.speechSynthesis.speak(msg);
+    try {
+      window.speechSynthesis.cancel(); // Clear queue before new alert
+      const msg = new SpeechSynthesisUtterance();
+      msg.text = `Attention: ${status} detected in ${location} endpoint. Please respond.`;
+      msg.rate = 0.9;
+      msg.lang = 'en-US';
+      window.speechSynthesis.speak(msg);
+    } catch (e) {
+      console.error("Speech synthesis failed:", e);
+    }
   };
   
   React.useEffect(() => {
@@ -103,6 +127,13 @@ const MobileAgent = () => {
     setShowSms(false);
     setShowSocAlert(false);
     setPhoneState('scanning');
+    
+    // Unlock audio for mobile
+    if ('speechSynthesis' in window) {
+      const unlock = new SpeechSynthesisUtterance('');
+      window.speechSynthesis.speak(unlock);
+    }
+    
     setTimeout(() => setEdrStatus('safe'), 1600);
   };
 
@@ -241,7 +272,7 @@ const MobileAgent = () => {
       </header>
 
       {/* ── Main layout: Phone LEFT | Agent Settings RIGHT ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '350px 1fr', gap: '2rem', marginBottom: '3rem' }}>
+      <div className="mobile-agent-main-layout" style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', marginBottom: '3rem' }}>
         {/* Android UI Mockup */}
         <div className="android-mockup">
           <div className="phone-frame">

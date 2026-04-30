@@ -9,17 +9,47 @@ const AlertsManager = () => {
   const [isVoiceEnabled, setIsVoiceEnabled] = useState(true);
   const [lastTxId, setLastTxId] = useState(null);
 
+  const playAlertSound = () => {
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
+      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+
+      oscillator.start(audioCtx.currentTime);
+      oscillator.stop(audioCtx.currentTime + 0.5);
+    } catch (e) {
+      console.error("Audio beep failed:", e);
+    }
+  };
+
   const announceThreat = (status, location) => {
+    playAlertSound(); // Always play beep if possible
+
     if (!isVoiceEnabled || !('speechSynthesis' in window)) {
-      window.speechSynthesis.cancel();
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
       return;
     }
     
-    window.speechSynthesis.cancel(); // Clear queue before new alert
-    const msg = new SpeechSynthesisUtterance();
-    msg.text = `Attention: ${status} detected in ${location} endpoint. Please respond.`;
-    msg.rate = 0.9;
-    window.speechSynthesis.speak(msg);
+    // Some browsers require a user interaction to play audio. 
+    // We expect the user to click "Voice Alerts ON" to unlock this.
+    try {
+      window.speechSynthesis.cancel(); // Clear queue before new alert
+      const msg = new SpeechSynthesisUtterance();
+      msg.text = `Attention: ${status} detected in ${location} endpoint. Please respond.`;
+      msg.rate = 0.9;
+      msg.lang = 'en-US';
+      window.speechSynthesis.speak(msg);
+    } catch (e) {
+      console.error("Speech synthesis failed:", e);
+    }
   };
 
   const fetchAlerts = async () => {
@@ -91,6 +121,11 @@ const AlertsManager = () => {
             } else {
               setIsVoiceEnabled(true);
               setLastTxId(null); // Force announcement of current threat on enable
+              // Unlock speech synthesis on mobile
+              if ('speechSynthesis' in window) {
+                const unlock = new SpeechSynthesisUtterance('');
+                window.speechSynthesis.speak(unlock);
+              }
             }
           }}
         >
