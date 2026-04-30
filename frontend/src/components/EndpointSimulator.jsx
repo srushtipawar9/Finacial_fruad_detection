@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { QrCode, Smartphone, BellRing, ShieldCheck, ShieldAlert, AlertTriangle, MessageSquare, Zap, Volume2 } from 'lucide-react';
+import { QrCode, Smartphone, BellRing, ShieldCheck, ShieldAlert, AlertTriangle, MessageSquare } from 'lucide-react';
 
 const API_URL = 'https://finacial-fruad-detection.onrender.com/api/soc';
 
@@ -17,7 +17,7 @@ const EndpointSimulator = () => {
     localStorage.setItem('endpointSim_merchantName', merchantName);
   }, [upiId, amount, merchantName]);
   const [preVerifyResult, setPreVerifyResult] = useState(null);
-  const [intentId, setIntentId] = useState(null);
+  // Removed intentId and setIntentId (unused)
   const [deviceHealth, setDeviceHealth] = useState({
     rooted: false,
     screenSharing: false,
@@ -36,8 +36,8 @@ const EndpointSimulator = () => {
     merchant_name: ''
   });
   const [smsContent, setSmsContent] = useState('');
-  const [gstVerification, setGstVerification] = useState(null);
-  const [voiceAlerts, setVoiceAlerts] = useState([]);
+  // const [gstVerification, setGstVerification] = useState(null); // Removed: unused
+  // const [voiceAlerts, setVoiceAlerts] = useState([]); // Removed: unused
 
   const reset = () => {
     setStep(1);
@@ -48,13 +48,13 @@ const EndpointSimulator = () => {
     localStorage.removeItem('endpointSim_amount');
     localStorage.removeItem('endpointSim_merchantName');
     setPreVerifyResult(null);
-    setIntentId(null);
+    // setIntentId(null); // removed unused
     setPostVerifyResult(null);
     setDeviceHealth({ rooted: false, screenSharing: false, unknownApps: 0, batteryLevel: 85 });
     setIsMismatchSim(false);
     setNotificationData({ amount: '', upi_id: '', merchant_name: '' });
     setSmsContent('');
-    setGstVerification(null);
+    // setGstVerification(null); // removed unused
     setSelectedLocation('Mumbai');
   };
 
@@ -96,7 +96,7 @@ const EndpointSimulator = () => {
   const verifyGST = async (upiId) => {
     try {
       const response = await axios.post(`${API_URL}/verify/gst`, { upi_id: upiId });
-      setGstVerification(response.data);
+      // setGstVerification(response.data); // removed unused
       return response.data;
     } catch (error) {
       console.error('GST verification failed:', error);
@@ -127,26 +127,7 @@ const EndpointSimulator = () => {
   };
 
   // Enhanced QR Analysis with AI
-  const analyzeQR = async (content) => {
-    setLoading(true);
-    try {
-      const response = await axios.post(`${API_URL}/qr/analyze`, { qrContent: content });
-      setPreVerifyResult(response.data);
-
-      // If QR is valid, auto-verify GST
-      if (response.data.status === 'Valid') {
-        // Extract UPI ID from QR content (simplified)
-        const upiMatch = content.match(/pa=([^&]+)/);
-        if (upiMatch) {
-          await verifyGST(upiMatch[1]);
-        }
-      }
-      setStep(2);
-    } catch (error) {
-      alert('QR analysis failed: ' + (error.response?.data?.error || error.message));
-    }
-    setLoading(false);
-  };
+  // Removed unused analyzeQR function
 
   const simulateTamperedQR = () => {
     reset();
@@ -181,7 +162,7 @@ const EndpointSimulator = () => {
         expectedAmount: finalAmount,
         expectedReceiver: finalReceiver
       });
-      setIntentId(intentRes.data.intentId);
+      // Removed setIntentId (intentId is not used)
 
       setTimeout(async () => {
         // Module B: Notification Listener Simulation
@@ -197,7 +178,7 @@ const EndpointSimulator = () => {
         setStep(3);
         setLoading(false);
       }, 1500);
-    } catch (error) {
+    } catch {
       alert('Payment failed');
       setLoading(false);
     }
