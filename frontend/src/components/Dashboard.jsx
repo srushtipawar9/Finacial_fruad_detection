@@ -59,12 +59,12 @@ const Dashboard = () => {
 
   return (
     <div className="fade-in">
-      <header style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-        <div>
+      <header style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+        <div style={{ flex: '1 1 min-content' }}>
           <h1>AI SOC Overview</h1>
           <p className="text-secondary">Global Financial Threat Detection Intelligence</p>
-          <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span className="badge badge-verified" style={{ fontSize: '0.7rem' }}>AI Learning Mode Active</span>
+          <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <span className="badge badge-verified" style={{ fontSize: '0.7rem', whiteSpace: 'nowrap' }}>AI Learning Mode Active</span>
             <input 
               type="number" 
               placeholder="Set New Limit (₹)" 
@@ -78,7 +78,7 @@ const Dashboard = () => {
             />
           </div>
         </div>
-        <a href="https://finacial-fruad-detection.onrender.com/api/soc/export" download className="btn" style={{ width: 'auto', padding: '0.5rem 1rem', fontSize: '0.875rem' }}>
+        <a href="https://finacial-fruad-detection.onrender.com/api/soc/export" download className="btn" style={{ width: 'auto', padding: '0.5rem 1rem', fontSize: '0.875rem', whiteSpace: 'nowrap', alignSelf: 'flex-start', flexShrink: 0 }}>
           Export Audit Logs
         </a>
       </header>
