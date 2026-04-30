@@ -98,6 +98,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -126,11 +127,13 @@ h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
 .app-container {
   display: flex;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .sidebar {
   width: 260px;
   background: var(--bg-glass);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-right: 1px solid var(--border-color);
   padding: 2rem 1.5rem;
@@ -177,6 +180,7 @@ h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
   flex: 1;
   padding: 2rem 3rem;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .btn {
@@ -191,6 +195,8 @@ h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
   background: var(--accent-blue);
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .btn:hover {
@@ -314,6 +320,7 @@ h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
 /* Glass Panels */
 .glass-panel {
   background: var(--bg-glass);
+  -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   border: 1px solid var(--border-color);
   border-radius: 16px;
@@ -766,6 +773,8 @@ input {
   font-size: 1rem;
   outline: none;
   transition: border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 input:focus {
